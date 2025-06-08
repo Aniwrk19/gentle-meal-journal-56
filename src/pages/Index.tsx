@@ -4,15 +4,19 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, Heart, Brain, Smile, Edit3 } from 'lucide-react';
 import GoalSelection from '@/components/GoalSelection';
 import MealPreview from '@/components/MealPreview';
+
 const Index = () => {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
-  return <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-emerald-100 rounded-full">
+            <div className="p-3 bg-emerald-100 rounded-full flex items-center gap-2">
               <Edit3 className="w-8 h-8 text-emerald-600" />
+              <span className="text-emerald-800 font-medium text-lg">NourishNote</span>
             </div>
           </div>
           <h1 className="text-4xl font-light text-slate-800 mb-6 leading-tight md:text-5xl text-center">
@@ -54,6 +58,8 @@ const Index = () => {
           <p>Built with care for mindful eating</p>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
