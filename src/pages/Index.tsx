@@ -18,12 +18,7 @@ const Index = () => {
           <Heart className="w-6 h-6 text-emerald-400" />
           <span className="text-xl font-medium text-white">NourishNote</span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-white/80">
-          <a href="#" className="hover:text-white transition-colors">About</a>
-          <a href="#" className="hover:text-white transition-colors">Services</a>
-          <a href="#" className="hover:text-white transition-colors">Blog</a>
-          <a href="#" className="hover:text-white transition-colors">Contact</a>
-        </div>
+        
       </nav>
 
       <div className="container mx-auto px-4 py-16 max-w-6xl">
