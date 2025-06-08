@@ -37,7 +37,7 @@ export const DashboardSidebar = ({
               {menuItems.map(item => <SidebarMenuItem key={item.key}>
                   <SidebarMenuButton isActive={activeTab === item.key} onClick={() => onTabChange(item.key)} className={`w-full justify-start gap-3 py-3 px-4 transition-all duration-200 ${activeTab === item.key ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-600/30' : 'text-slate-50 hover:bg-white/10 hover:text-slate-50'}`}>
                     <item.icon className="w-5 h-5" />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="font-medium text-base">{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>)}
             </SidebarMenu>
