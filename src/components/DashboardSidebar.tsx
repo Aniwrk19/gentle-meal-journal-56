@@ -24,7 +24,7 @@ export const DashboardSidebar = ({
     key: 'favorites' as const
   }];
   return <Sidebar className="border-r border-slate-600/30 bg-slate-800/50 backdrop-blur-sm">
-      <SidebarHeader className="p-6 border-b border-slate-600/30">
+      <SidebarHeader className="p-6 border-b border-slate-600/30 bg-zinc-400">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Heart className="w-6 h-6 text-emerald-400" />
           <span className="text-xl font-medium text-zinc-950">NourishNote</span>
