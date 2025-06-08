@@ -15,10 +15,10 @@ export const FavoritesView = ({ entries, onToggleFavorite }: FavoritesViewProps)
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-light text-slate-800 mb-2">
+        <h1 className="text-3xl font-light text-slate-50 mb-2">
           Your favorite meals
         </h1>
-        <p className="text-slate-600">
+        <p className="text-slate-300">
           Meals you've marked as favorites for easy reference
         </p>
       </div>
