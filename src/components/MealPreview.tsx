@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Utensils, Zap, Activity, Heart } from 'lucide-react';
 const MealPreview = () => {
   return <div className="text-center">
-      <h2 className="text-2xl font-light text-slate-800 mb-6">
+      <h2 className="text-2xl font-light mb-6 text-gray-50">
         See how it works
       </h2>
       <Card className="max-w-lg mx-auto p-6 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
