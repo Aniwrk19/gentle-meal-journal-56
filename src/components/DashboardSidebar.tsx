@@ -30,7 +30,7 @@ export const DashboardSidebar = ({
           <span className="text-xl font-medium text-zinc-950">NourishNote</span>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-zinc-400">
         <SidebarGroup className="bg-zinc-400">
           <SidebarGroupContent>
             <SidebarMenu>
