@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Utensils, Zap, Activity } from 'lucide-react';
+import { Utensils, Zap, Activity, Heart } from 'lucide-react';
 
 const MealPreview = () => {
   return (
