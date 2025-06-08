@@ -52,7 +52,7 @@ export const LogsView = ({
       </div>
 
       {/* Meal Input */}
-      <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <Card className="p-6 mb-6 backdrop-blur-sm border-0 shadow-lg bg-zinc-400">
         <div className="space-y-4">
           <Input placeholder="Tell us about your meal... (e.g., 'Had oatmeal with almond butter and coffee')" value={mealInput} onChange={e => setMealInput(e.target.value)} className="text-lg p-4 border-slate-200 focus:border-emerald-300" onKeyPress={e => e.key === 'Enter' && handleSubmit()} />
           <Button onClick={handleSubmit} disabled={!mealInput.trim()} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-full text-lg font-medium transition-all duration-200">
