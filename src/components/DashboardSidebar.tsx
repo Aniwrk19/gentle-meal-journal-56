@@ -37,11 +37,11 @@ export const DashboardSidebar = ({ activeTab, onTabChange }: DashboardSidebarPro
   ];
 
   return (
-    <Sidebar className="border-r border-slate-200">
-      <SidebarHeader className="p-6">
+    <Sidebar className="border-r border-slate-600/30 bg-slate-800/50 backdrop-blur-sm">
+      <SidebarHeader className="p-6 border-b border-slate-600/30">
         <div className="flex items-center gap-2">
-          <Edit3 className="w-6 h-6 text-emerald-600" />
-          <span className="text-xl font-semibold text-emerald-700">NourishNote</span>
+          <Heart className="w-6 h-6 text-emerald-400" />
+          <span className="text-xl font-medium text-white">NourishNote</span>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -53,7 +53,11 @@ export const DashboardSidebar = ({ activeTab, onTabChange }: DashboardSidebarPro
                   <SidebarMenuButton
                     isActive={activeTab === item.key}
                     onClick={() => onTabChange(item.key)}
-                    className="w-full justify-start gap-3 py-3 px-4"
+                    className={`w-full justify-start gap-3 py-3 px-4 transition-all duration-200 ${
+                      activeTab === item.key
+                        ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-600/30'
+                        : 'text-white/80 hover:bg-white/10 hover:text-white'
+                    }`}
                   >
                     <item.icon className="w-5 h-5" />
                     <span className="font-medium">{item.title}</span>

@@ -54,7 +54,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
       <SidebarProvider>
         <div className="flex w-full">
           <DashboardSidebar activeTab={activeTab} onTabChange={setActiveTab} />
