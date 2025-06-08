@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Utensils, Zap, Activity, Heart } from 'lucide-react';
-
 const MealPreview = () => {
-  return (
-    <div className="text-center">
+  return <div className="text-center">
       <h2 className="text-2xl font-light text-slate-800 mb-6">
         See how it works
       </h2>
@@ -59,7 +56,7 @@ const MealPreview = () => {
             <div className="flex items-start gap-2">
               <Heart className="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" />
               <div>
-                <span className="text-sm font-medium text-slate-600 block mb-1">Gentle tip</span>
+                <span className="text-sm font-medium text-slate-600 block mb-1 text-left">Gentle tip</span>
                 <p className="text-sm text-slate-700 text-left">
                   "Comforting and nourishing! Add some salad next time for more fiber."
                 </p>
@@ -68,8 +65,6 @@ const MealPreview = () => {
           </div>
         </div>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default MealPreview;
