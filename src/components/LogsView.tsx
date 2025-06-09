@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Heart, Zap, Activity } from 'lucide-react';
+
 interface LogsViewProps {
   onAddMeal: (entry: {
     meal: string;
@@ -14,15 +15,18 @@ interface LogsViewProps {
     tip: string;
   }) => void;
 }
-export const LogsView = ({
-  onAddMeal
-}: LogsViewProps) => {
+
+export const LogsView = ({ onAddMeal }: LogsViewProps) => {
   const [mealInput, setMealInput] = useState('');
   const [showResponse, setShowResponse] = useState(false);
   const [currentResponse, setCurrentResponse] = useState<any>(null);
-  const handleSubmit = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
     if (!mealInput.trim()) return;
 
+    setIsSubmitting(true);
+    
     // Generate a mock AI response
     const mockResponse = {
       meal: mealInput,
@@ -32,16 +36,30 @@ export const LogsView = ({
       fat: `${Math.floor(Math.random() * 25) + 5}g`,
       tip: generateMockTip(mealInput)
     };
+
     setCurrentResponse(mockResponse);
     setShowResponse(true);
-    onAddMeal(mockResponse);
+    
+    // Save to database
+    await onAddMeal(mockResponse);
+    
     setMealInput('');
+    setIsSubmitting(false);
   };
+
   const generateMockTip = (meal: string) => {
-    const tips = ["Great choice! Consider adding some leafy greens next time for extra nutrients.", "Wonderful! Your meal looks balanced - the fiber will keep you satisfied.", "Nice work! Adding a bit of healthy fat like avocado could enhance nutrient absorption.", "Looking good! Try pairing this with some herbal tea for better digestion.", "Excellent! This combination provides steady energy throughout the day."];
+    const tips = [
+      "Great choice! Consider adding some leafy greens next time for extra nutrients.",
+      "Wonderful! Your meal looks balanced - the fiber will keep you satisfied.",
+      "Nice work! Adding a bit of healthy fat like avocado could enhance nutrient absorption.",
+      "Looking good! Try pairing this with some herbal tea for better digestion.",
+      "Excellent! This combination provides steady energy throughout the day."
+    ];
     return tips[Math.floor(Math.random() * tips.length)];
   };
-  return <div className="max-w-2xl mx-auto">
+
+  return (
+    <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-light mb-2 text-slate-50">
           Log your meals here
@@ -54,9 +72,20 @@ export const LogsView = ({
       {/* Meal Input */}
       <Card className="p-6 mb-6 backdrop-blur-sm border-0 shadow-lg bg-zinc-400">
         <div className="space-y-4">
-          <Input placeholder="Tell us about your meal... (e.g., 'Had oatmeal with almond butter and coffee')" value={mealInput} onChange={e => setMealInput(e.target.value)} className="text-lg p-4 border-slate-200 focus:border-emerald-300" onKeyPress={e => e.key === 'Enter' && handleSubmit()} />
-          <Button onClick={handleSubmit} disabled={!mealInput.trim()} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-full text-lg font-medium transition-all duration-200">
-            Submit
+          <Input 
+            placeholder="Tell us about your meal... (e.g., 'Had oatmeal with almond butter and coffee')" 
+            value={mealInput} 
+            onChange={e => setMealInput(e.target.value)} 
+            className="text-lg p-4 border-slate-200 focus:border-emerald-300" 
+            onKeyPress={e => e.key === 'Enter' && !isSubmitting && handleSubmit()} 
+            disabled={isSubmitting}
+          />
+          <Button 
+            onClick={handleSubmit} 
+            disabled={!mealInput.trim() || isSubmitting} 
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-full text-lg font-medium transition-all duration-200"
+          >
+            {isSubmitting ? 'Analyzing...' : 'Submit'}
           </Button>
         </div>
       </Card>
@@ -115,5 +144,6 @@ export const LogsView = ({
             </div>
           </div>
         </Card>}
-    </div>;
+    </div>
+  );
 };

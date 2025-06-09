@@ -4,14 +4,33 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Heart, Zap, Activity } from 'lucide-react';
-import { MealEntry } from '@/pages/Dashboard';
+import { MealEntry } from '@/hooks/useMealEntries';
 
 interface HistoryViewProps {
   entries: MealEntry[];
   onToggleFavorite: (id: string) => void;
+  loading?: boolean;
 }
 
-export const HistoryView = ({ entries, onToggleFavorite }: HistoryViewProps) => {
+export const HistoryView = ({ entries, onToggleFavorite, loading = false }: HistoryViewProps) => {
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-light text-slate-50 mb-2">
+            Your meal history
+          </h1>
+          <p className="text-slate-300">
+            Track your mindful eating journey
+          </p>
+        </div>
+        <Card className="p-12 text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+          <p className="text-slate-500 text-lg">Loading your meal history...</p>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
@@ -36,7 +55,7 @@ export const HistoryView = ({ entries, onToggleFavorite }: HistoryViewProps) => 
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-slate-800 mb-1">
-                    {entry.timestamp.toLocaleDateString()} at {entry.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    {new Date(entry.created_at).toLocaleDateString()} at {new Date(entry.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                   </h3>
                   <p className="text-slate-700 bg-slate-50 p-3 rounded-lg">
                     "{entry.meal}"
@@ -46,9 +65,9 @@ export const HistoryView = ({ entries, onToggleFavorite }: HistoryViewProps) => 
                   variant="ghost"
                   size="sm"
                   onClick={() => onToggleFavorite(entry.id)}
-                  className={`ml-4 ${entry.isFavorite ? 'text-rose-500' : 'text-slate-400'} hover:text-rose-500`}
+                  className={`ml-4 ${entry.is_favorite ? 'text-rose-500' : 'text-slate-400'} hover:text-rose-500`}
                 >
-                  <Heart className={`w-5 h-5 ${entry.isFavorite ? 'fill-current' : ''}`} />
+                  <Heart className={`w-5 h-5 ${entry.is_favorite ? 'fill-current' : ''}`} />
                 </Button>
               </div>
 

@@ -6,40 +6,11 @@ import { LogsView } from '@/components/LogsView';
 import { HistoryView } from '@/components/HistoryView';
 import { FavoritesView } from '@/components/FavoritesView';
 import DashboardGoalSelection from '@/components/DashboardGoalSelection';
-
-export interface MealEntry {
-  id: string;
-  meal: string;
-  calories: string;
-  protein: string;
-  carbs: string;
-  fat: string;
-  tip: string;
-  timestamp: Date;
-  isFavorite: boolean;
-}
+import { useMealEntries } from '@/hooks/useMealEntries';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<'logs' | 'history' | 'favorites'>('logs');
-  const [mealEntries, setMealEntries] = useState<MealEntry[]>([]);
-
-  const addMealEntry = (entry: Omit<MealEntry, 'id' | 'timestamp' | 'isFavorite'>) => {
-    const newEntry: MealEntry = {
-      ...entry,
-      id: Date.now().toString(),
-      timestamp: new Date(),
-      isFavorite: false,
-    };
-    setMealEntries(prev => [newEntry, ...prev]);
-  };
-
-  const toggleFavorite = (id: string) => {
-    setMealEntries(prev => 
-      prev.map(entry => 
-        entry.id === id ? { ...entry, isFavorite: !entry.isFavorite } : entry
-      )
-    );
-  };
+  const { mealEntries, loading, addMealEntry, toggleFavorite } = useMealEntries();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -51,9 +22,9 @@ const Dashboard = () => {
           </div>
         );
       case 'history':
-        return <HistoryView entries={mealEntries} onToggleFavorite={toggleFavorite} />;
+        return <HistoryView entries={mealEntries} onToggleFavorite={toggleFavorite} loading={loading} />;
       case 'favorites':
-        return <FavoritesView entries={mealEntries.filter(entry => entry.isFavorite)} onToggleFavorite={toggleFavorite} />;
+        return <FavoritesView entries={mealEntries.filter(entry => entry.is_favorite)} onToggleFavorite={toggleFavorite} loading={loading} />;
       default:
         return (
           <div>
