@@ -45,6 +45,15 @@ const AuthForm = ({
         }
         result = await signUp(email, password, username, fullName);
       } else {
+        if (!username.trim()) {
+          toast({
+            title: "Username or Email required",
+            description: "Please enter your username or email.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
         result = await signIn(email, password);
       }
       if (result.error) {
@@ -119,31 +128,43 @@ const AuthForm = ({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {mode === 'signup' && <>
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-slate-700">Username *</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                <Input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter your username" className="pl-10" required />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="fullName" className="text-slate-700">Full Name *</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Enter your full name" className="pl-10" />
-              </div>
-            </div>
-          </>}
-
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-slate-700">Email *</Label>
+          <Label htmlFor="username" className="text-slate-700">
+            {mode === 'signup' ? 'Username *' : 'Username or Email *'}
+          </Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-            <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" className="pl-10" required />
+            <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            <Input 
+              id="username" 
+              type="text" 
+              value={username} 
+              onChange={e => setUsername(e.target.value)} 
+              placeholder={mode === 'signup' ? 'Enter your username' : 'Enter username or email'} 
+              className="pl-10" 
+              required 
+            />
           </div>
         </div>
+
+        {mode === 'signup' && (
+          <div className="space-y-2">
+            <Label htmlFor="fullName" className="text-slate-700">Full Name</Label>
+            <div className="relative">
+              <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Enter your full name" className="pl-10" />
+            </div>
+          </div>
+        )}
+
+        {mode === 'signup' && (
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-slate-700">Email *</Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" className="pl-10" required />
+            </div>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="password" className="text-slate-700">Password *</Label>
