@@ -20,6 +20,10 @@ const Auth = () => {
     setMode(mode === 'signin' ? 'signup' : 'signin');
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 flex items-center justify-center">
@@ -32,10 +36,13 @@ const Auth = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
       {/* Header */}
       <nav className="flex justify-between items-center px-6 py-4">
-        <div className="flex items-center gap-2">
+        <button 
+          onClick={handleLogoClick}
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
+        >
           <Heart className="w-6 h-6 text-emerald-400" />
           <span className="text-xl font-medium text-white">NourishNote</span>
-        </div>
+        </button>
       </nav>
 
       {/* Main Content */}

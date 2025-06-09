@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupContent } from '@/components/ui/sidebar';
 import { Edit3, Clock, Heart, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -18,6 +17,7 @@ export const DashboardSidebar = ({
 }: DashboardSidebarProps) => {
   const { signOut } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     const { error } = await signOut();
@@ -33,6 +33,10 @@ export const DashboardSidebar = ({
         description: "You have been signed out successfully."
       });
     }
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
   };
 
   const menuItems = [
@@ -56,10 +60,13 @@ export const DashboardSidebar = ({
   return (
     <Sidebar className="border-r border-slate-600/30 bg-slate-800/50 backdrop-blur-sm">
       <SidebarHeader className="p-6 border-b border-slate-600/30 bg-zinc-400">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <button 
+          onClick={handleLogoClick}
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
+        >
           <Heart className="w-6 h-6 text-emerald-400" />
           <span className="text-xl font-medium text-zinc-950">NourishNote</span>
-        </Link>
+        </button>
       </SidebarHeader>
       <SidebarContent className="bg-zinc-400">
         <SidebarGroup className="bg-zinc-400">
