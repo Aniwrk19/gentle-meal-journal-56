@@ -106,10 +106,7 @@ const AuthForm = ({
           <Chrome className="w-5 h-5" />
           Continue with Google
         </Button>
-        <Button type="button" variant="outline" className="w-full justify-start gap-3" onClick={() => handleSocialLogin('apple')} disabled={loading}>
-          <Apple className="w-5 h-5" />
-          Continue with Apple
-        </Button>
+        
       </div>
 
       <div className="relative mb-6">
