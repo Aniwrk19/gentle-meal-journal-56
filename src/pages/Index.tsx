@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,18 +6,18 @@ import GoalSelection from '@/components/GoalSelection';
 import MealPreview from '@/components/MealPreview';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-
 const Index = () => {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
-
+  const {
+    user,
+    loading
+  } = useAuth();
   useEffect(() => {
     if (user && !loading) {
       navigate('/dashboard');
     }
   }, [user, loading, navigate]);
-
   const handleGetStarted = () => {
     if (user) {
       navigate('/dashboard');
@@ -26,36 +25,24 @@ const Index = () => {
       navigate('/auth');
     }
   };
-
   const handleSignIn = () => {
     navigate('/auth');
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 flex items-center justify-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
       {/* Navigation */}
       <nav className="flex justify-between items-center px-6 py-4 bg-transparent">
         <div className="flex items-center gap-2">
           <Heart className="w-6 h-6 text-emerald-400" />
           <span className="text-xl font-medium text-white">NourishNote</span>
         </div>
-        {!user && (
-          <Button 
-            variant="outline" 
-            onClick={handleSignIn}
-            className="text-white border-white/20 hover:bg-white/10"
-          >
+        {!user && <Button variant="outline" onClick={handleSignIn} className="border-white/20 text-center bg-slate-50 text-slate-950 rounded-full">
             Sign In
-          </Button>
-        )}
+          </Button>}
       </nav>
 
       <div className="container mx-auto px-4 py-16 max-w-6xl">
@@ -71,11 +58,7 @@ const Index = () => {
             Providing gentle guidance and mindful reflections to help you
             achieve a healthier relationship with food.
           </p>
-          <Button 
-            onClick={handleGetStarted} 
-            size="lg" 
-            className="bg-white text-slate-900 hover:bg-white/90 px-8 py-3 rounded-full text-lg font-medium transition-all duration-200 hover:scale-105"
-          >
+          <Button onClick={handleGetStarted} size="lg" className="bg-white text-slate-900 hover:bg-white/90 px-8 py-3 rounded-full text-lg font-medium transition-all duration-200 hover:scale-105">
             Get Started
           </Button>
         </div>
@@ -95,8 +78,6 @@ const Index = () => {
           <p>Built with care for mindful eating</p>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
