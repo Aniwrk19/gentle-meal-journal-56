@@ -1,29 +1,60 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupContent } from '@/components/ui/sidebar';
-import { Edit3, Clock, Heart } from 'lucide-react';
+import { Edit3, Clock, Heart, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+
 interface DashboardSidebarProps {
   activeTab: 'logs' | 'history' | 'favorites';
   onTabChange: (tab: 'logs' | 'history' | 'favorites') => void;
 }
+
 export const DashboardSidebar = ({
   activeTab,
   onTabChange
 }: DashboardSidebarProps) => {
-  const menuItems = [{
-    title: 'Logs',
-    icon: Edit3,
-    key: 'logs' as const
-  }, {
-    title: 'History',
-    icon: Clock,
-    key: 'history' as const
-  }, {
-    title: 'Favorites',
-    icon: Heart,
-    key: 'favorites' as const
-  }];
-  return <Sidebar className="border-r border-slate-600/30 bg-slate-800/50 backdrop-blur-sm">
+  const { signOut } = useAuth();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully."
+      });
+    }
+  };
+
+  const menuItems = [
+    {
+      title: 'Logs',
+      icon: Edit3,
+      key: 'logs' as const
+    },
+    {
+      title: 'History',
+      icon: Clock,
+      key: 'history' as const
+    },
+    {
+      title: 'Favorites',
+      icon: Heart,
+      key: 'favorites' as const
+    }
+  ];
+
+  return (
+    <Sidebar className="border-r border-slate-600/30 bg-slate-800/50 backdrop-blur-sm">
       <SidebarHeader className="p-6 border-b border-slate-600/30 bg-zinc-400">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Heart className="w-6 h-6 text-emerald-400" />
@@ -34,15 +65,38 @@ export const DashboardSidebar = ({
         <SidebarGroup className="bg-zinc-400">
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map(item => <SidebarMenuItem key={item.key}>
-                  <SidebarMenuButton isActive={activeTab === item.key} onClick={() => onTabChange(item.key)} className={`w-full justify-start gap-3 py-3 px-4 transition-all duration-200 ${activeTab === item.key ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-600/30' : 'text-slate-50 hover:bg-white/10 hover:text-slate-50'}`}>
+              {menuItems.map(item => (
+                <SidebarMenuItem key={item.key}>
+                  <SidebarMenuButton 
+                    isActive={activeTab === item.key} 
+                    onClick={() => onTabChange(item.key)} 
+                    className={`w-full justify-start gap-3 py-3 px-4 transition-all duration-200 ${
+                      activeTab === item.key 
+                        ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-600/30' 
+                        : 'text-slate-50 hover:bg-white/10 hover:text-slate-50'
+                    }`}
+                  >
                     <item.icon className="w-5 h-5" />
                     <span className="font-medium text-base">{item.title}</span>
                   </SidebarMenuButton>
-                </SidebarMenuItem>)}
+                </SidebarMenuItem>
+              ))}
+              
+              {/* Sign Out Button */}
+              <SidebarMenuItem className="mt-auto">
+                <Button
+                  variant="ghost"
+                  onClick={handleSignOut}
+                  className="w-full justify-start gap-3 py-3 px-4 text-slate-50 hover:bg-red-600/20 hover:text-red-300"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-medium text-base">Sign Out</span>
+                </Button>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-    </Sidebar>;
+    </Sidebar>
+  );
 };
