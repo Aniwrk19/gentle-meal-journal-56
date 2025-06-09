@@ -5,6 +5,7 @@ import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { LogsView } from '@/components/LogsView';
 import { HistoryView } from '@/components/HistoryView';
 import { FavoritesView } from '@/components/FavoritesView';
+import DashboardGoalSelection from '@/components/DashboardGoalSelection';
 
 export interface MealEntry {
   id: string;
@@ -43,13 +44,23 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'logs':
-        return <LogsView onAddMeal={addMealEntry} />;
+        return (
+          <div>
+            <DashboardGoalSelection />
+            <LogsView onAddMeal={addMealEntry} />
+          </div>
+        );
       case 'history':
         return <HistoryView entries={mealEntries} onToggleFavorite={toggleFavorite} />;
       case 'favorites':
         return <FavoritesView entries={mealEntries.filter(entry => entry.isFavorite)} onToggleFavorite={toggleFavorite} />;
       default:
-        return <LogsView onAddMeal={addMealEntry} />;
+        return (
+          <div>
+            <DashboardGoalSelection />
+            <LogsView onAddMeal={addMealEntry} />
+          </div>
+        );
     }
   };
 
