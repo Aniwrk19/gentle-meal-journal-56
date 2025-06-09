@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -5,34 +6,29 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Lock, User, Apple, Chrome } from 'lucide-react';
+import { Mail, Lock, User, Chrome } from 'lucide-react';
+
 interface AuthFormProps {
   mode: 'signin' | 'signup';
   onToggleMode: () => void;
 }
-const AuthForm = ({
-  mode,
-  onToggleMode
-}: AuthFormProps) => {
+
+const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
-  const {
-    signUp,
-    signIn,
-    signInWithGoogle,
-    signInWithApple
-  } = useAuth();
-  const {
-    toast
-  } = useToast();
+  const { signUp, signIn, signInWithGoogle } = useAuth();
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
       let result;
+      
       if (mode === 'signup') {
         if (!username.trim()) {
           toast({
@@ -43,9 +39,23 @@ const AuthForm = ({
           setLoading(false);
           return;
         }
+        
+        if (!email.trim()) {
+          toast({
+            title: "Email required",
+            description: "Please enter an email address.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+        
         result = await signUp(email, password, username, fullName);
       } else {
-        if (!username.trim()) {
+        // For sign in, determine if the username field contains an email or username
+        const loginIdentifier = username.trim();
+        
+        if (!loginIdentifier) {
           toast({
             title: "Username or Email required",
             description: "Please enter your username or email.",
@@ -54,8 +64,26 @@ const AuthForm = ({
           setLoading(false);
           return;
         }
-        result = await signIn(email, password);
+        
+        // Check if the input looks like an email (contains @)
+        const isEmail = loginIdentifier.includes('@');
+        
+        if (isEmail) {
+          // If it's an email, use it directly
+          result = await signIn(loginIdentifier, password);
+        } else {
+          // If it's a username, we need to convert it to email
+          // For now, we'll show an error asking for email
+          toast({
+            title: "Please use your email address",
+            description: "Please sign in with your email address instead of username.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
       }
+      
       if (result.error) {
         toast({
           title: "Authentication Error",
@@ -78,10 +106,11 @@ const AuthForm = ({
       setLoading(false);
     }
   };
-  const handleSocialLogin = async (provider: 'google' | 'apple') => {
+
+  const handleSocialLogin = async (provider: 'google') => {
     setLoading(true);
     try {
-      const result = provider === 'google' ? await signInWithGoogle() : await signInWithApple();
+      const result = await signInWithGoogle();
       if (result.error) {
         toast({
           title: "Authentication Error",
@@ -99,7 +128,9 @@ const AuthForm = ({
       setLoading(false);
     }
   };
-  return <Card className="w-full max-w-md mx-auto p-6 bg-white/90 backdrop-blur-sm">
+
+  return (
+    <Card className="w-full max-w-md mx-auto p-6 bg-white/90 backdrop-blur-sm">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-semibold text-slate-800">
           {mode === 'signup' ? 'Create Account' : 'Welcome Back'}
@@ -111,11 +142,16 @@ const AuthForm = ({
 
       {/* Social Login Buttons */}
       <div className="space-y-3 mb-6">
-        <Button type="button" variant="outline" className="w-full justify-start gap-3" onClick={() => handleSocialLogin('google')} disabled={loading}>
+        <Button 
+          type="button" 
+          variant="outline" 
+          className="w-full justify-start gap-3" 
+          onClick={() => handleSocialLogin('google')} 
+          disabled={loading}
+        >
           <Chrome className="w-5 h-5" />
           Continue with Google
         </Button>
-        
       </div>
 
       <div className="relative mb-6">
@@ -130,16 +166,20 @@ const AuthForm = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="username" className="text-slate-700">
-            {mode === 'signup' ? 'Username *' : 'Username or Email *'}
+            {mode === 'signup' ? 'Username *' : 'Email Address *'}
           </Label>
           <div className="relative">
-            <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            {mode === 'signup' ? (
+              <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            ) : (
+              <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            )}
             <Input 
               id="username" 
-              type="text" 
+              type={mode === 'signup' ? 'text' : 'email'}
               value={username} 
-              onChange={e => setUsername(e.target.value)} 
-              placeholder={mode === 'signup' ? 'Enter your username' : 'Enter username or email'} 
+              onChange={(e) => setUsername(e.target.value)} 
+              placeholder={mode === 'signup' ? 'Enter your username' : 'Enter your email address'} 
               className="pl-10" 
               required 
             />
@@ -151,7 +191,14 @@ const AuthForm = ({
             <Label htmlFor="fullName" className="text-slate-700">Full Name</Label>
             <div className="relative">
               <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-              <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Enter your full name" className="pl-10" />
+              <Input 
+                id="fullName" 
+                type="text" 
+                value={fullName} 
+                onChange={(e) => setFullName(e.target.value)} 
+                placeholder="Enter your full name" 
+                className="pl-10" 
+              />
             </div>
           </div>
         )}
@@ -161,7 +208,15 @@ const AuthForm = ({
             <Label htmlFor="email" className="text-slate-700">Email *</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" className="pl-10" required />
+              <Input 
+                id="email" 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                placeholder="Enter your email" 
+                className="pl-10" 
+                required 
+              />
             </div>
           </div>
         )}
@@ -170,7 +225,15 @@ const AuthForm = ({
           <Label htmlFor="password" className="text-slate-700">Password *</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-            <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" className="pl-10" required />
+            <Input 
+              id="password" 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Enter your password" 
+              className="pl-10" 
+              required 
+            />
           </div>
         </div>
 
@@ -182,11 +245,16 @@ const AuthForm = ({
       <div className="text-center mt-6">
         <p className="text-slate-600">
           {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
-          <button onClick={onToggleMode} className="text-emerald-600 hover:text-emerald-700 font-medium">
+          <button 
+            onClick={onToggleMode} 
+            className="text-emerald-600 hover:text-emerald-700 font-medium"
+          >
             {mode === 'signup' ? 'Sign In' : 'Sign Up'}
           </button>
         </p>
       </div>
-    </Card>;
+    </Card>
+  );
 };
+
 export default AuthForm;
