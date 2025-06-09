@@ -34,9 +34,7 @@ const Index = () => {
             Providing gentle guidance and mindful reflections to help you
             achieve a healthier relationship with food.
           </p>
-          <Button onClick={handleGetStarted} size="lg" className="bg-white text-slate-900 hover:bg-white/90 px-8 py-3 rounded-full text-lg font-medium transition-all duration-200 hover:scale-105">
-            Get Started →
-          </Button>
+          <Button onClick={handleGetStarted} size="lg" className="bg-white text-slate-900 hover:bg-white/90 px-8 py-3 rounded-full text-lg font-medium transition-all duration-200 hover:scale-105">Get Started </Button>
         </div>
 
         {/* Goal Selection */}
